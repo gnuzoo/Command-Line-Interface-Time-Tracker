@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__)
+require "tt_schema"
+require "tt_cli_helper"
+
+entries = TimeEntry.find(:all, :order => :id)
+
+entries.each do |te|
+  puts [ te.task.project.name, te.task.project.detail, te.task.name, te.task.detail, te.period_start, te.period_end, te.detail ].join("\t")
+end
