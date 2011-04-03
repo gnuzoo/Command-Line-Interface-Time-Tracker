@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__)
+require "tt_schema"
+require "tt_cli_helper"
+
+le = TimeEntry.latest
+
+if le && le.period_end.nil?
+  puts "Close time entry for #{le.task.name} - #{le.task.project.name}? (Y/n)? "
+  choice = STDIN.readline.chomp
+  if choice.match(/^[^yY]/)
+    exit
+  end
+  le.close
+end
+
+puts "Projects:"
+
+projects = Project.find(:all, :order => :name)
+projects.each_with_index do |x, i|
+  puts "#{i} - #{x.name}"
+end
+puts "Enter your project selection"
+
+pi = STDIN.readline.chomp
+p = nil
+if pi.match(/^[0-9][0-9]*$/)
+  p = projects[pi.to_i]
+else
+  p = Project.create!(:name => pi)
+end
+
+puts "Tasks:"
+
+tasks = p.tasks.sort{|a,b| a.name <=> b.name}
+tasks.each_with_index do |x, i|
+  puts "#{i} - #{x.name}"
+end
+puts "Enter your task selection"
+
+ti = STDIN.readline.chomp
+if ti.match(/^[0-9][0-9]*$/)
+  t = tasks[ti.to_i]
+else
+  t = Task.create!(:name => ti, :project_id => p.id)
+end
+
+puts "Enter any detail for this time entry:"
+detail = STDIN.readline.chomp.to_i
+
+TimeEntry.create!(:task_id => t.id, :detail => detail, :period_start => Time.now)

@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__)
+require "tt_schema"
+require "tt_cli_helper"
+
+
+usage if ARGV.length == 0
+
+convert_object_class( ARGV.shift )
+
+@conditions = {}
+
+ARGV.each do |x|
+  (k,v) = x.split(':')
+  @conditions[k] = v
+end
+
+pp @conditions
+
+results = @oc.find(:all, :conditions => @conditions)
+
+pp results

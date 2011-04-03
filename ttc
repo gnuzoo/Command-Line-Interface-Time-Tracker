@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__)
+require "tt_schema"
+require "tt_cli_helper"
+
+
+usage if ARGV.length == 0
+
+convert_object_class( ARGV.shift )
+
+@attrs = {}
+
+ARGV.each do |x|
+  (k,v) = x.split(':')
+  @attrs[k] = v
+end
+
+obj = @oc.create!(@attrs)
+
+pp obj
