@@ -24,6 +24,8 @@ class TimeEntry < ActiveRecord::Base
 
   def close
     self.period_end = Time.now
-    self.save
+    self.save!
+
+    return self.period_end
   end
 end

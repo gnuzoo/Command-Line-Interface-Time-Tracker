@@ -4,6 +4,7 @@ $: << File.dirname(__FILE__)
 require "tt_schema"
 require "tt_cli_helper"
 
+now = Time.now
 le = TimeEntry.latest
 
 if le && le.period_end.nil?
@@ -12,8 +13,9 @@ if le && le.period_end.nil?
   if choice.match(/^[^yY]/)
     exit
   end
-  le.close
+  now = le.close
 end
+
 
 puts "Projects:"
 
@@ -49,4 +51,4 @@ end
 puts "Enter any detail for this time entry:"
 detail = STDIN.readline.chomp
 
-TimeEntry.create!(:task_id => t.id, :detail => detail, :period_start => Time.now)
+TimeEntry.create!(:task_id => t.id, :detail => detail, :period_start => now)
