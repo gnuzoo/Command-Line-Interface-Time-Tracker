@@ -8,14 +8,18 @@ now = Time.now
 le = TimeEntry.latest
 
 if le && le.period_end.nil?
-  puts "Close time entry for #{le.task.name} - #{le.task.project.name}? (Y/n)? "
-  choice = STDIN.readline.chomp
-  if choice.match(/^[^yY]/)
-    exit
+  while true
+    puts "Close time entry for #{le.task.name} - #{le.task.project.name}? (y/n)? "
+    choice = STDIN.readline.chomp
+    if choice.match(/^[nN]/)
+      exit
+    end
+    if choice.match(/^[yY]/)
+      now = le.close
+      break
+    end
   end
-  now = le.close
 end
-
 
 puts "Projects:"
 

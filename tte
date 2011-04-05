@@ -7,5 +7,5 @@ require "tt_cli_helper"
 entries = TimeEntry.find(:all, :order => :id)
 
 entries.each do |te|
-  puts [ te.task.project.name, te.task.project.detail, te.task.name, te.task.detail, te.period_start, te.period_end, te.detail ].join("\t")
+  puts [ te.task.project.name, te.task.project.detail, te.task.name, te.task.detail, (te.period_end - te.period_start)/3600.0, te.period_start, te.period_end, te.detail ].join("\t")
 end
